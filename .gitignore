@@ -3,3 +3,53 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# --- Rider / JetBrains ---
+.idea/
+*.sln.iml
+
+# --- Build output ---
+bin/
+obj/
+out/
+publish/
+
+# --- .NET generated files ---
+*.user
+*.userprefs
+*.DS_Store
+*.suo
+*.cache
+*.pidb
+*.apk
+*.mdb
+*.pdb
+*.db
+*.bak
+
+# --- Logs ---
+*.log
+
+# --- OS Junk Files ---
+Thumbs.db
+ehthumbs.db
+.DS_Store
+
+# --- DataGrip / Database Tools ---
+/data/
+*.sql-journal
+*.pgpass
+.pgadmin/
+database/.idea/
+
+# --- Environment / Secrets ---
+*.env
+.env.*
+
+# --- Rider solution caches ---
+/.idea/shelf/
+/.idea/caches/
+
+# --- Temporary files ---
+*.tmp
+*.temp
