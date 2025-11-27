@@ -11,6 +11,7 @@ public class Router
     public Router(UserController users)
     {
         _users = users;
+        
     }
 
     public void Handle(HttpListenerContext ctx)
@@ -18,6 +19,8 @@ public class Router
         string path = ctx.Request.Url.AbsolutePath.ToLower();
         string method = ctx.Request.HttpMethod;
         
+        Console.WriteLine($"PATH: {path}, METHOD: {method}");
+
         //Test endpoint
         if (path == "/test")
         {
@@ -36,5 +39,6 @@ public class Router
         ctx.Response.StatusCode = 404;
         ctx.Response.Close();
     }
+    
     
 }   
