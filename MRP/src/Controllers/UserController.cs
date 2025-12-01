@@ -2,11 +2,14 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using MRP.Models;
+using MRP.Services;
 
 namespace MRP.Controllers;
 
 public class UserController
 {
+    private static Dictionary<string, string> Users = new();
+
     public void Handle(HttpListenerContext ctx)
     {
         string path = ctx.Request.Url.AbsolutePath.TrimEnd('/').ToLower();
@@ -33,26 +36,46 @@ public class UserController
     {
         var data = ReadJson<RegisterRequest>(ctx.Request);
 
-        SendJson(ctx.Response, new 
+        if (Users.ContainsKey(data.username))
         {
-            success = true,
-            message = "User registered",
-            username = data.username
-        });
+            SendJson(ctx.Response, new { success = false, message = "User already exists" });
+            return;
+        }
+
+        Users[data.username] = data.password;
+
+        SendJson(ctx.Response, new { success = true, message = "User registered", username = data.username });
     }
+
 
     // Login
     private void HandleLogin(HttpListenerContext ctx)
     {
         var data = ReadJson<RegisterRequest>(ctx.Request);
 
-        SendJson(ctx.Response, new 
+        // gibts den user
+        if (!Users.ContainsKey(data.username))
         {
-            success = true,
-            message = "Login OK",
-            username = data.username
-        });
+            SendJson(ctx.Response, new { success = false, message = "User does not exist" });
+            return;
+        }
+        
+        string storedPassword = Users[data.username];
+
+        // passwort vergleichen
+        if (storedPassword != data.password)
+        {
+            SendJson(ctx.Response, new { success = false, message = "Wrong password" });
+            return;
+        }
+
+        // token erzeugen
+        string token = TokenService.CreateToken(data.username);
+        
+        SendJson(ctx.Response, new { success = true, token = token });
     }
+
+
 
     // Json Parsing
     private T ReadJson<T>(HttpListenerRequest request)
