@@ -34,43 +34,43 @@ public class UserController
     // Register
     private void HandleRegister(HttpListenerContext ctx)
     {
-        var data = ReadJson<RegisterRequest>(ctx.Request);
+        var data = ReadJson<User>(ctx.Request);
 
-        if (Users.ContainsKey(data.username))
+        if (Users.ContainsKey(data.Username))
         {
             SendJson(ctx.Response, new { success = false, message = "User already exists" });
             return;
         }
 
-        Users[data.username] = data.password;
+        Users[data.Username] = data.Password;
 
-        SendJson(ctx.Response, new { success = true, message = "User registered", username = data.username });
+        SendJson(ctx.Response, new { success = true, message = "User registered", username = data.Username });
     }
 
 
     // Login
     private void HandleLogin(HttpListenerContext ctx)
     {
-        var data = ReadJson<RegisterRequest>(ctx.Request);
+        var data = ReadJson<User>(ctx.Request);
 
         // gibts den user
-        if (!Users.ContainsKey(data.username))
+        if (!Users.ContainsKey(data.Username))
         {
             SendJson(ctx.Response, new { success = false, message = "User does not exist" });
             return;
         }
         
-        string storedPassword = Users[data.username];
+        string storedPassword = Users[data.Username];
 
         // passwort vergleichen
-        if (storedPassword != data.password)
+        if (storedPassword != data.Password)
         {
             SendJson(ctx.Response, new { success = false, message = "Wrong password" });
             return;
         }
 
         // token erzeugen
-        string token = TokenService.CreateToken(data.username);
+        string token = TokenService.CreateToken(data.Username);
         
         SendJson(ctx.Response, new { success = true, token = token });
     }

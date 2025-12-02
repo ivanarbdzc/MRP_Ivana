@@ -20,15 +20,6 @@ public class Router
         string method = ctx.Request.HttpMethod;
         
         Console.WriteLine($"PATH: {path}, METHOD: {method}");
-
-        //Test endpoint
-        if (path == "/test")
-        {
-            byte[] buffer = Encoding.UTF8.GetBytes("test");
-            ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
-            ctx.Response.Close();
-            return;
-        }
         
         if (path.StartsWith("/users/"))
         {
