@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using MRP.Models;
 using MRP.Services;
 
@@ -15,15 +16,39 @@ public class UserController
         string path = ctx.Request.Url.AbsolutePath.TrimEnd('/').ToLower();
         string method = ctx.Request.HttpMethod;
 
-        if (path == "/users/register" && method == "POST")
+        if (path == "/api/users/register" && method == "POST")
         {
             HandleRegister(ctx);
             return;
         }
 
-        if (path == "/users/login" && method == "POST")
+        if (path == "/api/users/login" && method == "POST")
         {
             HandleLogin(ctx);
+            return;
+        }
+        
+        if (Regex.IsMatch(path, @"^/api/users/\d+/profile$") && method == "GET")
+        {
+            HttpHelper.SendNotImplemented(ctx.Response);
+            return;
+        }
+        
+        if (Regex.IsMatch(path, @"^/api/users/\d+/profile$") && method == "PUT")
+        {
+            HttpHelper.SendNotImplemented(ctx.Response);
+            return;
+        }
+
+        if (Regex.IsMatch(path, @"^/api/users/\d+/ratings$") && method == "GET")
+        {
+            HttpHelper.SendNotImplemented(ctx.Response);
+            return;
+        }
+
+        if (Regex.IsMatch(path, @"^/api/users/\d+/favorites$")  && method == "GET")
+        {
+            HttpHelper.SendNotImplemented(ctx.Response);
             return;
         }
 
